@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shikishaadmin/views/home_page.dart';
+import 'package:shikishaadmin/views/sellers.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,11 +13,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const HomeScreen());
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      initialRoute: "/",
+      routes: {
+        '/': (context) => const HomeScreen(),
+        '/sellers': (context) => const Sellers()
+      },
+    );
   }
 }
