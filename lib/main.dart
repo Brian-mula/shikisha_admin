@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shikishaadmin/views/home_page.dart';
+import 'package:shikishaadmin/views/seller.dart';
 import 'package:shikishaadmin/views/sellers.dart';
 
 void main() {
@@ -21,7 +22,8 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       routes: {
         '/': (context) => const HomeScreen(),
-        '/sellers': (context) => const Sellers()
+        '/sellers': (context) => const Sellers(),
+        '/seller': (context) => const Seller()
       },
     );
   }

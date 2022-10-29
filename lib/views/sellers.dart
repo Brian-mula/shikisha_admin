@@ -9,6 +9,7 @@ class Sellers extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ThemeData theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: GestureDetector(
@@ -45,23 +46,28 @@ class Sellers extends ConsumerWidget {
               itemCount: 4,
               itemBuilder: (context, index) => Container(
                     margin: const EdgeInsets.only(top: 14),
-                    child: ListTile(
-                      leading: const CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            "https://cdn.pixabay.com/photo/2016/08/20/05/38/avatar-1606916__340.png"),
-                        radius: 20,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, "/seller");
+                      },
+                      child: ListTile(
+                        leading: const CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              "https://cdn.pixabay.com/photo/2016/08/20/05/38/avatar-1606916__340.png"),
+                          radius: 20,
+                        ),
+                        title: InfoText(
+                          text: "Mulati Brian",
+                          textstyle: theme.textTheme.bodyLarge,
+                        ),
+                        trailing: const IconButton(
+                            onPressed: null,
+                            icon: Icon(
+                              Icons.arrow_forward_ios,
+                              size: 30,
+                              color: Colors.black45,
+                            )),
                       ),
-                      title: InfoText(
-                        text: "Mulati Brian",
-                        textstyle: theme.textTheme.bodyLarge,
-                      ),
-                      trailing: const IconButton(
-                          onPressed: null,
-                          icon: Icon(
-                            Icons.arrow_forward_ios,
-                            size: 30,
-                            color: Colors.black45,
-                          )),
                     ),
                   ))),
     );
