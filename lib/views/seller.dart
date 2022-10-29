@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shikishaadmin/widgets/products.dart';
 import 'package:shikishaadmin/widgets/text_widget.dart';
 
 class Seller extends ConsumerWidget {
@@ -14,12 +15,17 @@ class Seller extends ConsumerWidget {
           backgroundColor: Colors.white,
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            leading: Container(
-              padding: const EdgeInsets.only(left: 10),
-              child: const Icon(
-                Icons.arrow_back,
-                size: 30,
-                color: Colors.black,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, '/sellers');
+              },
+              child: Container(
+                padding: const EdgeInsets.only(left: 10),
+                child: const Icon(
+                  Icons.arrow_back,
+                  size: 30,
+                  color: Colors.black,
+                ),
               ),
             ),
             backgroundColor: Colors.white,
@@ -51,7 +57,7 @@ class Seller extends ConsumerWidget {
             ]),
           ),
           body: const TabBarView(children: [
-            InfoText(text: "Products"),
+            Products(),
             InfoText(text: "Rejected"),
             InfoText(text: "Manage"),
           ])),
