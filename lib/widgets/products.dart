@@ -17,7 +17,57 @@ class Products extends ConsumerWidget {
             style: ButtonStyle(
                 backgroundColor:
                     MaterialStateProperty.all(Colors.green.shade600)),
-            onPressed: () {},
+            onPressed: () => showDialog(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                      title: InfoText(
+                        text: "Add new Product",
+                        textstyle: theme.textTheme.headline6!
+                            .copyWith(color: Colors.black54),
+                      ),
+                      content: Form(
+                        child: Column(
+                          children: const [InfoText(text: "form fields")],
+                        ),
+                      ),
+                      actions: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton.icon(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red)),
+                                onPressed: null,
+                                icon: const Icon(
+                                  Icons.cancel,
+                                  size: 30,
+                                  color: Colors.white,
+                                ),
+                                label: InfoText(
+                                  text: "Cancel",
+                                  textstyle: theme.textTheme.bodyLarge!
+                                      .copyWith(color: Colors.white),
+                                )),
+                            ElevatedButton.icon(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.green.shade600)),
+                                onPressed: null,
+                                icon: const Icon(
+                                  Icons.cancel,
+                                  size: 30,
+                                  color: Colors.white,
+                                ),
+                                label: InfoText(
+                                  text: "Save",
+                                  textstyle: theme.textTheme.bodyLarge!
+                                      .copyWith(color: Colors.white),
+                                ))
+                          ],
+                        )
+                      ],
+                    )),
             icon: const Icon(
               Icons.add,
               size: 30,
