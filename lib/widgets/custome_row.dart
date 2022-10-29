@@ -22,7 +22,8 @@ class CustomeRow extends ConsumerWidget {
           width: 50,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              image: DecorationImage(image: NetworkImage(imgurl))),
+              image: DecorationImage(
+                  image: NetworkImage(imgurl), fit: BoxFit.cover)),
         ),
         Column(
           children: [titletext, qtytext],

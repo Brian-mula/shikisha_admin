@@ -11,6 +11,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ThemeData theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.0,
@@ -88,7 +89,45 @@ class HomeScreen extends ConsumerWidget {
                       )),
                 )
               ],
-            ))
+            )),
+            const Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton.icon(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.green.shade500)),
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/sellers");
+                    },
+                    icon: const Icon(
+                      Icons.people,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+                    label: InfoText(
+                      text: "Sellers",
+                      textstyle: theme.textTheme.bodyLarge!
+                          .copyWith(color: Colors.white),
+                    )),
+                ElevatedButton.icon(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.blue.shade600)),
+                    onPressed: null,
+                    icon: const Icon(
+                      Icons.shopping_cart,
+                      size: 26,
+                      color: Colors.white,
+                    ),
+                    label: InfoText(
+                      text: "Manage sales",
+                      textstyle: theme.textTheme.bodyLarge!
+                          .copyWith(color: Colors.white),
+                    ))
+              ],
+            )
           ],
         ),
       ),
