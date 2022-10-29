@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shikishaadmin/widgets/products.dart';
+import 'package:shikishaadmin/widgets/rejected.dart';
 import 'package:shikishaadmin/widgets/text_widget.dart';
 
 class Seller extends ConsumerWidget {
@@ -58,7 +59,7 @@ class Seller extends ConsumerWidget {
           ),
           body: const TabBarView(children: [
             Products(),
-            InfoText(text: "Rejected"),
+            Rejected(),
             InfoText(text: "Manage"),
           ])),
     );
