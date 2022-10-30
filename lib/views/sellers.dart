@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:shikishaadmin/widgets/custome_input.dart';
 import 'package:shikishaadmin/widgets/text_widget.dart';
 
 class Sellers extends ConsumerWidget {
@@ -7,6 +9,7 @@ class Sellers extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    TextEditingController nameController = TextEditingController();
     ThemeData theme = Theme.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -30,12 +33,46 @@ class Sellers extends ConsumerWidget {
         title: const InfoText(text: "All Sellers"),
         centerTitle: true,
         actions: [
-          Container(
-            padding: const EdgeInsets.only(right: 10),
-            child: const Icon(
-              Icons.add,
-              color: Colors.black,
-              size: 30,
+          GestureDetector(
+            onTap: () => showDialog(
+                context: context,
+                builder: (BuildContext context) => Form(
+                        child: AlertDialog(
+                      scrollable: true,
+                      title: const InfoText(text: "New Seller"),
+                      content: Column(
+                        children: [
+                          CustomeInput(
+                            controller: nameController,
+                            label: "username",
+                            inputType: TextInputType.name,
+                            icon: Icons.person,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          IntlPhoneField(
+                            decoration: const InputDecoration(
+                              labelText: 'Phone Number',
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(),
+                              ),
+                            ),
+                            initialCountryCode: 'KE',
+                            onChanged: (phone) {
+                              print(phone.completeNumber);
+                            },
+                          )
+                        ],
+                      ),
+                    ))),
+            child: Container(
+              padding: const EdgeInsets.only(right: 10),
+              child: const Icon(
+                Icons.add,
+                color: Colors.black,
+                size: 30,
+              ),
             ),
           )
         ],
