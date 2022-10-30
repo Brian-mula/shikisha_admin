@@ -9,7 +9,7 @@ class User {
   Stream get users => _firestore.collection("users").snapshots();
 
   // !add a new user
-  Future<void> addNewUser(String name, int phone) async {
+  Future<void> addNewUser(String name, String phone) async {
     try {
       await _users.add({"name": name, "phone": phone});
     } catch (e) {
@@ -18,7 +18,7 @@ class User {
   }
 
   // !edit a user
-  Future<void> updateUser(String name, String id, int phone) async {
+  Future<void> updateUser(String name, String id, String phone) async {
     try {
       await _users.doc(id).update({"name": name, "phone": phone});
     } catch (e) {

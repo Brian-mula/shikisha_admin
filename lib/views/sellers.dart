@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:shikishaadmin/providers/users_provider.dart';
 import 'package:shikishaadmin/widgets/custome_input.dart';
 import 'package:shikishaadmin/widgets/text_widget.dart';
 
@@ -10,6 +11,9 @@ class Sellers extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     TextEditingController nameController = TextEditingController();
+    TextEditingController phoneController = TextEditingController();
+    final user = ref.watch(userProvider);
+    String phone = '';
     ThemeData theme = Theme.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -52,6 +56,7 @@ class Sellers extends ConsumerWidget {
                             height: 10,
                           ),
                           IntlPhoneField(
+                            controller: phoneController,
                             decoration: const InputDecoration(
                               labelText: 'Phone Number',
                               border: OutlineInputBorder(
@@ -89,6 +94,9 @@ class Sellers extends ConsumerWidget {
                                     backgroundColor: MaterialStateProperty.all(
                                         Colors.green.shade600)),
                                 onPressed: () async {
+                                  await user.addNewUser(nameController.text,
+                                      phoneController.text);
+                                  Navigator.of(context).pop();
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
                                           backgroundColor: Colors.white,
