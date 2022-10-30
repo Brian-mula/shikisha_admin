@@ -65,6 +65,57 @@ class Sellers extends ConsumerWidget {
                           )
                         ],
                       ),
+                      actions: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton.icon(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red)),
+                                onPressed: null,
+                                icon: const Icon(
+                                  Icons.cancel,
+                                  size: 30,
+                                  color: Colors.white,
+                                ),
+                                label: InfoText(
+                                  text: "Cancel",
+                                  textstyle: theme.textTheme.bodyLarge!
+                                      .copyWith(color: Colors.white),
+                                )),
+                            ElevatedButton.icon(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.green.shade600)),
+                                onPressed: () async {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                          backgroundColor: Colors.white,
+                                          content: InfoText(
+                                            text: "Processing data",
+                                            textstyle: theme
+                                                .textTheme.bodyLarge!
+                                                .copyWith(
+                                                    color:
+                                                        Colors.green.shade600),
+                                          )));
+
+                                  // Navigator.of(context).pop();
+                                },
+                                icon: const Icon(
+                                  Icons.cancel,
+                                  size: 30,
+                                  color: Colors.white,
+                                ),
+                                label: InfoText(
+                                  text: "Save",
+                                  textstyle: theme.textTheme.bodyLarge!
+                                      .copyWith(color: Colors.white),
+                                ))
+                          ],
+                        )
+                      ],
                     ))),
             child: Container(
               padding: const EdgeInsets.only(right: 10),
