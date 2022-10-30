@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shikishaadmin/widgets/custome_input.dart';
 import 'package:shikishaadmin/widgets/text_widget.dart';
 
 class Products extends ConsumerWidget {
@@ -7,6 +8,10 @@ class Products extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final formKey = GlobalKey<FormState>();
+    final TextEditingController titleController = TextEditingController();
+    final TextEditingController descriptionController = TextEditingController();
+    final TextEditingController priceController = TextEditingController();
     ThemeData theme = Theme.of(context);
     return Column(
       children: [
@@ -19,16 +24,58 @@ class Products extends ConsumerWidget {
                     MaterialStateProperty.all(Colors.green.shade600)),
             onPressed: () => showDialog(
                 context: context,
-                builder: (BuildContext context) => AlertDialog(
-                      title: InfoText(
-                        text: "Add new Product",
-                        textstyle: theme.textTheme.headline6!
-                            .copyWith(color: Colors.black54),
-                      ),
-                      content: Form(
-                        child: Column(
-                          children: const [InfoText(text: "form fields")],
+                builder: (BuildContext context) => Form(
+                    key: formKey,
+                    child: AlertDialog(
+                      scrollable: true,
+                      title: Center(
+                        child: InfoText(
+                          text: "Add new Product",
+                          textstyle: theme.textTheme.headline6!
+                              .copyWith(color: Colors.black54),
                         ),
+                      ),
+                      content: Column(
+                        children: [
+                          CustomeInput(
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Title cannot be empty";
+                                }
+                                return null;
+                              },
+                              inputType: TextInputType.name,
+                              controller: titleController,
+                              label: "Title"),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          CustomeInput(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Description cannot be empty";
+                              }
+                              return null;
+                            },
+                            controller: descriptionController,
+                            label: "Description",
+                            inputType: TextInputType.multiline,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          CustomeInput(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Price cannot be empty";
+                              }
+                              return null;
+                            },
+                            controller: priceController,
+                            label: "Price",
+                            inputType: TextInputType.number,
+                          )
+                        ],
                       ),
                       actions: [
                         Row(
@@ -53,7 +100,23 @@ class Products extends ConsumerWidget {
                                 style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                         Colors.green.shade600)),
-                                onPressed: null,
+                                onPressed: () async {
+                                  if (formKey.currentState!.validate()) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                            backgroundColor: Colors.white,
+                                            content: InfoText(
+                                              text: "Processing data",
+                                              textstyle: theme
+                                                  .textTheme.bodyLarge!
+                                                  .copyWith(
+                                                      color: Colors
+                                                          .green.shade600),
+                                            )));
+
+                                    // Navigator.of(context).pop();
+                                  }
+                                },
                                 icon: const Icon(
                                   Icons.cancel,
                                   size: 30,
@@ -67,7 +130,7 @@ class Products extends ConsumerWidget {
                           ],
                         )
                       ],
-                    )),
+                    ))),
             icon: const Icon(
               Icons.add,
               size: 30,
@@ -78,37 +141,40 @@ class Products extends ConsumerWidget {
               textstyle:
                   theme.textTheme.bodyLarge!.copyWith(color: Colors.white),
             )),
-        SizedBox(
-          height: 650,
-          child: ListView.builder(
-            itemCount: 10,
-            itemBuilder: (context, int index) => Container(
-              margin: const EdgeInsets.only(top: 10),
-              child: ListTile(
-                leading: Container(
-                  width: 60,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: const DecorationImage(
-                          image: NetworkImage(
-                              "https://images.unsplash.com/photo-1603302576837-37561b2e2302?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bGFwdG9wc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"),
-                          fit: BoxFit.cover)),
-                ),
-                title: InfoText(
-                  text: "HP Elite book",
-                  textstyle: theme.textTheme.bodyLarge!
-                      .copyWith(color: Colors.green.shade600),
-                ),
-                subtitle: InfoText(
-                  text: "30",
-                  textstyle: theme.textTheme.bodyLarge!
-                      .copyWith(color: Colors.orange.shade600),
-                ),
-                trailing: InfoText(
-                  text: "Ksh. 30000",
-                  textstyle: theme.textTheme.bodyLarge!
-                      .copyWith(fontSize: 18, color: Colors.orange.shade700),
+        SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: SizedBox(
+            height: 650,
+            child: ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, int index) => Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: ListTile(
+                  leading: Container(
+                    width: 60,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: const DecorationImage(
+                            image: NetworkImage(
+                                "https://images.unsplash.com/photo-1603302576837-37561b2e2302?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bGFwdG9wc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"),
+                            fit: BoxFit.cover)),
+                  ),
+                  title: InfoText(
+                    text: "HP Elite book",
+                    textstyle: theme.textTheme.bodyLarge!
+                        .copyWith(color: Colors.green.shade600),
+                  ),
+                  subtitle: InfoText(
+                    text: "30",
+                    textstyle: theme.textTheme.bodyLarge!
+                        .copyWith(color: Colors.orange.shade600),
+                  ),
+                  trailing: InfoText(
+                    text: "Ksh. 30000",
+                    textstyle: theme.textTheme.bodyLarge!
+                        .copyWith(fontSize: 18, color: Colors.orange.shade700),
+                  ),
                 ),
               ),
             ),
