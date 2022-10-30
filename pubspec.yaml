@@ -40,6 +40,7 @@ dependencies:
   intl_phone_field: ^3.1.0
   firebase_core: ^2.1.1
   cloud_firestore: ^4.0.3
+  status_change: ^2.0.0
 
 dev_dependencies:
   flutter_test:

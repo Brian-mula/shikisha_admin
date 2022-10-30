@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shikishaadmin/widgets/stepper.dart';
 import 'package:shikishaadmin/widgets/text_widget.dart';
 
 class Order extends ConsumerWidget {
@@ -106,7 +107,9 @@ class Order extends ConsumerWidget {
                 ),
               ),
             ),
-          )
+          ),
+          const Positioned(
+              top: 300, left: 20, right: 20, child: CustomeStepper())
         ],
       ),
     );
