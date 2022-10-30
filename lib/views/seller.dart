@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shikishaadmin/models/user_model.dart';
+import 'package:shikishaadmin/widgets/manage_user.dart';
 import 'package:shikishaadmin/widgets/products.dart';
 import 'package:shikishaadmin/widgets/rejected.dart';
 import 'package:shikishaadmin/widgets/text_widget.dart';
@@ -10,6 +12,8 @@ class Seller extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ThemeData theme = Theme.of(context);
+    final user = ModalRoute.of(context)!.settings.arguments as UserModel;
+    print(user.toSnapshot().entries.first);
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -31,7 +35,7 @@ class Seller extends ConsumerWidget {
             ),
             backgroundColor: Colors.white,
             elevation: 0.0,
-            title: const InfoText(text: "+254717105986"),
+            title: InfoText(text: user.phone),
             centerTitle: true,
             bottom: TabBar(tabs: [
               Tab(
@@ -57,10 +61,12 @@ class Seller extends ConsumerWidget {
               )
             ]),
           ),
-          body: const TabBarView(children: [
-            Products(),
-            Rejected(),
-            InfoText(text: "Manage"),
+          body: TabBarView(children: [
+            const Products(),
+            const Rejected(),
+            ManageUser(
+              user: user,
+            )
           ])),
     );
   }
