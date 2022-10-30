@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shikishaadmin/views/home_page.dart';
+import 'package:shikishaadmin/views/order.dart';
+import 'package:shikishaadmin/views/orders.dart';
 import 'package:shikishaadmin/views/seller.dart';
 import 'package:shikishaadmin/views/sellers.dart';
 
@@ -31,7 +33,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomeScreen(),
         '/sellers': (context) => const Sellers(),
-        '/seller': (context) => const Seller()
+        '/seller': (context) => const Seller(),
+        '/orders': (context) => const Orders(),
+        '/order': (context) => const Order()
       },
     );
   }

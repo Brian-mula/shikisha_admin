@@ -147,7 +147,8 @@ class Sellers extends ConsumerWidget {
                           margin: const EdgeInsets.only(top: 14),
                           child: GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(context, "/seller");
+                              Navigator.pushNamed(context, "/seller",
+                                  arguments: data[index]);
                             },
                             child: ListTile(
                               leading: const CircleAvatar(

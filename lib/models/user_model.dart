@@ -6,10 +6,7 @@ class UserModel {
   String name;
   String phone;
 
-  UserModel({
-    required this.name,
-    required this.phone,
-  });
+  UserModel({required this.name, required this.phone});
 
   Map<String, dynamic> toSnapshot() {
     return {
