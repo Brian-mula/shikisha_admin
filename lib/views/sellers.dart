@@ -13,6 +13,7 @@ class Sellers extends ConsumerWidget {
     TextEditingController nameController = TextEditingController();
     TextEditingController phoneController = TextEditingController();
     final user = ref.watch(userProvider);
+    final users = ref.watch(userStream);
     String phone = '';
     ThemeData theme = Theme.of(context);
     return Scaffold(
@@ -138,33 +139,40 @@ class Sellers extends ConsumerWidget {
       ),
       body: Container(
           padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-          child: ListView.builder(
-              itemCount: 4,
-              itemBuilder: (context, index) => Container(
-                    margin: const EdgeInsets.only(top: 14),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, "/seller");
-                      },
-                      child: ListTile(
-                        leading: const CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              "https://cdn.pixabay.com/photo/2016/08/20/05/38/avatar-1606916__340.png"),
-                          radius: 20,
-                        ),
-                        title: InfoText(
-                          text: "Mulati Brian",
-                          textstyle: theme.textTheme.bodyLarge,
-                        ),
-                        trailing: const IconButton(
-                            onPressed: null,
-                            icon: Icon(
-                              Icons.arrow_forward_ios,
-                              size: 30,
-                              color: Colors.black45,
-                            )),
-                      ),
-                    ),
+          child: users.when(
+              data: (data) {
+                return ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, index) => Container(
+                          margin: const EdgeInsets.only(top: 14),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, "/seller");
+                            },
+                            child: ListTile(
+                              leading: const CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    "https://cdn.pixabay.com/photo/2016/08/20/05/38/avatar-1606916__340.png"),
+                                radius: 20,
+                              ),
+                              title: InfoText(
+                                text: data[index].name,
+                                textstyle: theme.textTheme.bodyLarge,
+                              ),
+                              trailing: const IconButton(
+                                  onPressed: null,
+                                  icon: Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 30,
+                                    color: Colors.black45,
+                                  )),
+                            ),
+                          ),
+                        ));
+              },
+              error: (error, stack) => InfoText(text: error.toString()),
+              loading: () => const Center(
+                    child: CircularProgressIndicator(),
                   ))),
     );
   }

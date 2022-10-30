@@ -3,31 +3,30 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
-  final String phoneNumber;
-  final String userName;
+  String name;
+  String phone;
 
   UserModel({
-    required this.phoneNumber,
-    required this.userName,
+    required this.name,
+    required this.phone,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toSnapshot() {
     return {
-      'phoneNumber': phoneNumber,
-      'userName': userName,
+      'name': name,
+      'phone': phone,
     };
   }
 
-  factory UserModel.fromDocumentSnapshot(DocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
+  factory UserModel.fromSnapshot(DocumentSnapshot map) {
     return UserModel(
-      phoneNumber: data['number'] ?? 'Some number',
-      userName: data['name'] ?? 'Some Name',
+      name: map['name'] ?? 'Username',
+      phone: map['phone'] ?? '07XXXXXXXX',
     );
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() => json.encode(toSnapshot());
 
   factory UserModel.fromJson(String source) =>
-      UserModel.fromDocumentSnapshot(json.decode(source));
+      UserModel.fromSnapshot(json.decode(source));
 }

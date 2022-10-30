@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shikishaadmin/models/user_model.dart';
 
 class User {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -6,7 +7,13 @@ class User {
       FirebaseFirestore.instance.collection("users");
 
   // !get all users
-  Stream get users => _firestore.collection("users").snapshots();
+  Stream<List<UserModel>> get getUserData {
+    return _users.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return UserModel.fromSnapshot(doc);
+      }).toList();
+    });
+  }
 
   // !add a new user
   Future<void> addNewUser(String name, String phone) async {
