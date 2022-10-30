@@ -115,7 +115,9 @@ class HomeScreen extends ConsumerWidget {
                     style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.all(Colors.blue.shade600)),
-                    onPressed: null,
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/orders");
+                    },
                     icon: const Icon(
                       Icons.shopping_cart,
                       size: 26,
