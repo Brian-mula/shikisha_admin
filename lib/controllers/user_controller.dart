@@ -7,12 +7,16 @@ class User {
       FirebaseFirestore.instance.collection("users");
 
   // !get all users
-  Stream<List<UserModel>> get getUserData {
-    return _users.snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) {
-        return UserModel.fromSnapshot(doc);
-      }).toList();
-    });
+  Future<List<UserModel>> get getUserData async {
+    // return _users.snapshots().map((snapshot) {
+    //   return snapshot.docs.map((doc) {
+    //     return UserModel.fromSnapshot(doc);
+    //   }).toList();
+    // });
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await _firestore.collection("users").get();
+
+    return snapshot.docs.map((doc) => UserModel.fromSnapshot(doc)).toList();
   }
 
   // !add a new user

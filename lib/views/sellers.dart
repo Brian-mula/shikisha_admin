@@ -13,7 +13,7 @@ class Sellers extends ConsumerWidget {
     TextEditingController nameController = TextEditingController();
     TextEditingController phoneController = TextEditingController();
     final user = ref.watch(userProvider);
-    final users = ref.watch(userStream);
+    final users = ref.watch(usersProvider);
     String phone = '';
     ThemeData theme = Theme.of(context);
     return Scaffold(
