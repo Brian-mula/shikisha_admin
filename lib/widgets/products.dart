@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shikishaadmin/models/product_model.dart';
+import 'package:shikishaadmin/models/user_model.dart';
+import 'package:shikishaadmin/providers/product_provider.dart';
 import 'package:shikishaadmin/widgets/custome_input.dart';
 import 'package:shikishaadmin/widgets/text_widget.dart';
 
 class Products extends ConsumerWidget {
-  const Products({super.key});
+  const Products({super.key, required this.user});
+  final UserModel user;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -13,6 +17,11 @@ class Products extends ConsumerWidget {
     final TextEditingController descriptionController = TextEditingController();
     final TextEditingController priceController = TextEditingController();
     ThemeData theme = Theme.of(context);
+    final product = ref.watch(productclass);
+    final allProducts = ref.watch(productProvider);
+    final specifiUser = ref.watch(specificUserProducts);
+    Future<List<ProductModel>> firebaseProducts =
+        specifiUser.userProducts(user);
     return Column(
       children: [
         const SizedBox(
@@ -101,21 +110,16 @@ class Products extends ConsumerWidget {
                                     backgroundColor: MaterialStateProperty.all(
                                         Colors.green.shade600)),
                                 onPressed: () async {
-                                  if (formKey.currentState!.validate()) {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                            backgroundColor: Colors.white,
-                                            content: InfoText(
-                                              text: "Processing data",
-                                              textstyle: theme
-                                                  .textTheme.bodyLarge!
-                                                  .copyWith(
-                                                      color: Colors
-                                                          .green.shade600),
-                                            )));
-
-                                    // Navigator.of(context).pop();
-                                  }
+                                  ProductModel productModel = ProductModel(
+                                      title: titleController.text,
+                                      category: "category",
+                                      description: descriptionController.text,
+                                      img: "img",
+                                      price: int.parse(priceController.text),
+                                      seller: user.name,
+                                      phone: user.phone);
+                                  await product.addProduct(productModel, user);
+                                  Navigator.of(context).pop();
                                 },
                                 icon: const Icon(
                                   Icons.cancel,
@@ -144,41 +148,51 @@ class Products extends ConsumerWidget {
         SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: SizedBox(
-            height: 650,
-            child: ListView.builder(
-              itemCount: 10,
-              itemBuilder: (context, int index) => Container(
-                margin: const EdgeInsets.only(top: 10),
-                child: ListTile(
-                  leading: Container(
-                    width: 60,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: const DecorationImage(
-                            image: NetworkImage(
-                                "https://images.unsplash.com/photo-1603302576837-37561b2e2302?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bGFwdG9wc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"),
-                            fit: BoxFit.cover)),
-                  ),
-                  title: InfoText(
-                    text: "HP Elite book",
-                    textstyle: theme.textTheme.bodyLarge!
-                        .copyWith(color: Colors.green.shade600),
-                  ),
-                  subtitle: InfoText(
-                    text: "30",
-                    textstyle: theme.textTheme.bodyLarge!
-                        .copyWith(color: Colors.orange.shade600),
-                  ),
-                  trailing: InfoText(
-                    text: "Ksh. 30000",
-                    textstyle: theme.textTheme.bodyLarge!
-                        .copyWith(fontSize: 18, color: Colors.orange.shade700),
-                  ),
-                ),
-              ),
-            ),
-          ),
+              height: 650,
+              child: allProducts.when(
+                  data: (data) {
+                    return ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, int index) => Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        child: ListTile(
+                          leading: Container(
+                            width: 60,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: const DecorationImage(
+                                    image: NetworkImage(
+                                        "https://images.unsplash.com/photo-1603302576837-37561b2e2302?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bGFwdG9wc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"),
+                                    fit: BoxFit.cover)),
+                          ),
+                          title: InfoText(
+                            text: data[index].title,
+                            textstyle: theme.textTheme.bodyLarge!
+                                .copyWith(color: Colors.green.shade600),
+                          ),
+                          subtitle: InfoText(
+                            text: "30",
+                            textstyle: theme.textTheme.bodyLarge!
+                                .copyWith(color: Colors.orange.shade600),
+                          ),
+                          trailing: InfoText(
+                            text: "Ksh. ${data[index].price}",
+                            textstyle: theme.textTheme.bodyLarge!.copyWith(
+                                fontSize: 18, color: Colors.orange.shade700),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  error: (error, stacktrace) => InfoText(
+                        text: error.toString(),
+                        textstyle: theme.textTheme.headline6!
+                            .copyWith(color: Colors.red),
+                      ),
+                  loading: () => const Center(
+                        child: CircularProgressIndicator(),
+                      ))),
         ),
       ],
     );

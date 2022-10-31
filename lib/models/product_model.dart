@@ -3,8 +3,9 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductModel {
-  String id;
+  String? id;
   String title;
+  String category;
   String description;
   String img;
   int price;
@@ -12,8 +13,9 @@ class ProductModel {
   String phone;
 
   ProductModel(
-      {required this.id,
+      {this.id,
       required this.title,
+      required this.category,
       required this.description,
       required this.img,
       required this.price,
@@ -22,8 +24,8 @@ class ProductModel {
 
   Map<String, dynamic> toSnapshot() {
     return {
-      'id': id,
       'title': title,
+      'category': category,
       'description': description,
       'img': img,
       'price': price,
@@ -35,9 +37,10 @@ class ProductModel {
   ProductModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> doc)
       : id = doc.id,
         title = doc.data()!["title"],
+        category = doc.data()!['category'],
         price = doc.data()!['price'],
         description = doc.data()!['description'],
-        img = doc.data()!['img'],
+        img = doc.data()!['image'],
         seller = doc.data()!['seller'],
         phone = doc.data()!['phone'];
 
