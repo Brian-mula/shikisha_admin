@@ -3,6 +3,7 @@ import 'package:shikishaadmin/models/product_model.dart';
 import 'package:shikishaadmin/models/user_model.dart';
 
 class ProductsContoller {
+  bool isExisting = false;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final CollectionReference _products =
       FirebaseFirestore.instance.collection("products");
@@ -16,6 +17,15 @@ class ProductsContoller {
     // });
     QuerySnapshot<Map<String, dynamic>> snapshot =
         await _firestore.collection("products").get();
+    return snapshot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
+  }
+
+  Future<List<ProductModel>> userProducts(UserModel user) async {
+    QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+        .collection("products")
+        .where('phone', isEqualTo: user.phone)
+        .get();
+    isExisting = true;
     return snapshot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
   }
 

@@ -40,7 +40,7 @@ class ProductModel {
         category = doc.data()!['category'],
         price = doc.data()!['price'],
         description = doc.data()!['description'],
-        img = doc.data()!['img'],
+        img = doc.data()!['image'],
         seller = doc.data()!['seller'],
         phone = doc.data()!['phone'];
 

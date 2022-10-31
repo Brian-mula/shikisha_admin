@@ -18,6 +18,10 @@ class Products extends ConsumerWidget {
     final TextEditingController priceController = TextEditingController();
     ThemeData theme = Theme.of(context);
     final product = ref.watch(productclass);
+    final allProducts = ref.watch(productProvider);
+    final specifiUser = ref.watch(specificUserProducts);
+    Future<List<ProductModel>> firebaseProducts =
+        specifiUser.userProducts(user);
     return Column(
       children: [
         const SizedBox(
@@ -144,41 +148,51 @@ class Products extends ConsumerWidget {
         SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: SizedBox(
-            height: 650,
-            child: ListView.builder(
-              itemCount: 10,
-              itemBuilder: (context, int index) => Container(
-                margin: const EdgeInsets.only(top: 10),
-                child: ListTile(
-                  leading: Container(
-                    width: 60,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: const DecorationImage(
-                            image: NetworkImage(
-                                "https://images.unsplash.com/photo-1603302576837-37561b2e2302?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bGFwdG9wc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"),
-                            fit: BoxFit.cover)),
-                  ),
-                  title: InfoText(
-                    text: "HP Elite book",
-                    textstyle: theme.textTheme.bodyLarge!
-                        .copyWith(color: Colors.green.shade600),
-                  ),
-                  subtitle: InfoText(
-                    text: "30",
-                    textstyle: theme.textTheme.bodyLarge!
-                        .copyWith(color: Colors.orange.shade600),
-                  ),
-                  trailing: InfoText(
-                    text: "Ksh. 30000",
-                    textstyle: theme.textTheme.bodyLarge!
-                        .copyWith(fontSize: 18, color: Colors.orange.shade700),
-                  ),
-                ),
-              ),
-            ),
-          ),
+              height: 650,
+              child: allProducts.when(
+                  data: (data) {
+                    return ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, int index) => Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        child: ListTile(
+                          leading: Container(
+                            width: 60,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: const DecorationImage(
+                                    image: NetworkImage(
+                                        "https://images.unsplash.com/photo-1603302576837-37561b2e2302?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bGFwdG9wc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"),
+                                    fit: BoxFit.cover)),
+                          ),
+                          title: InfoText(
+                            text: data[index].title,
+                            textstyle: theme.textTheme.bodyLarge!
+                                .copyWith(color: Colors.green.shade600),
+                          ),
+                          subtitle: InfoText(
+                            text: "30",
+                            textstyle: theme.textTheme.bodyLarge!
+                                .copyWith(color: Colors.orange.shade600),
+                          ),
+                          trailing: InfoText(
+                            text: "Ksh. ${data[index].price}",
+                            textstyle: theme.textTheme.bodyLarge!.copyWith(
+                                fontSize: 18, color: Colors.orange.shade700),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  error: (error, stacktrace) => InfoText(
+                        text: error.toString(),
+                        textstyle: theme.textTheme.headline6!
+                            .copyWith(color: Colors.red),
+                      ),
+                  loading: () => const Center(
+                        child: CircularProgressIndicator(),
+                      ))),
         ),
       ],
     );
