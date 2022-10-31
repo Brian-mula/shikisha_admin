@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shikishaadmin/models/product_model.dart';
+import 'package:shikishaadmin/models/user_model.dart';
 
 class ProductsContoller {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -19,10 +20,20 @@ class ProductsContoller {
   }
 
   // ! add a product
-  Future<void> addProduct(ProductModel product) async {
+  Future<void> addProduct(ProductModel product, UserModel user) async {
     try {
-      await _products.add({
+      // await _products.add({
+      //   "title": product.title,
+      //   "category": product.category,
+      //   "description": product.description,
+      //   "price": product.price,
+      //   "image": product.img,
+      //   "seller": product.seller,
+      //   "phone": product.phone
+      // });
+      await _products.doc(user.id).set({
         "title": product.title,
+        "category": product.category,
         "description": product.description,
         "price": product.price,
         "image": product.img,

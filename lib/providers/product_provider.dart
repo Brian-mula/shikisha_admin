@@ -10,3 +10,5 @@ ProductsContoller _products = ProductsContoller();
 final productProvider = FutureProvider<List<ProductModel>>((ref) async {
   return _products.allProducts;
 });
+
+final productclass = Provider<ProductsContoller>((ref) => ProductsContoller());

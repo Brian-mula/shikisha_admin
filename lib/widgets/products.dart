@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shikishaadmin/models/product_model.dart';
+import 'package:shikishaadmin/models/user_model.dart';
+import 'package:shikishaadmin/providers/product_provider.dart';
 import 'package:shikishaadmin/widgets/custome_input.dart';
 import 'package:shikishaadmin/widgets/text_widget.dart';
 
 class Products extends ConsumerWidget {
-  const Products({super.key});
+  const Products({super.key, required this.user});
+  final UserModel user;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -13,6 +17,7 @@ class Products extends ConsumerWidget {
     final TextEditingController descriptionController = TextEditingController();
     final TextEditingController priceController = TextEditingController();
     ThemeData theme = Theme.of(context);
+    final product = ref.watch(productclass);
     return Column(
       children: [
         const SizedBox(
@@ -101,21 +106,16 @@ class Products extends ConsumerWidget {
                                     backgroundColor: MaterialStateProperty.all(
                                         Colors.green.shade600)),
                                 onPressed: () async {
-                                  if (formKey.currentState!.validate()) {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                            backgroundColor: Colors.white,
-                                            content: InfoText(
-                                              text: "Processing data",
-                                              textstyle: theme
-                                                  .textTheme.bodyLarge!
-                                                  .copyWith(
-                                                      color: Colors
-                                                          .green.shade600),
-                                            )));
-
-                                    // Navigator.of(context).pop();
-                                  }
+                                  ProductModel productModel = ProductModel(
+                                      title: titleController.text,
+                                      category: "category",
+                                      description: descriptionController.text,
+                                      img: "img",
+                                      price: int.parse(priceController.text),
+                                      seller: user.name,
+                                      phone: user.phone);
+                                  await product.addProduct(productModel, user);
+                                  Navigator.of(context).pop();
                                 },
                                 icon: const Icon(
                                   Icons.cancel,

@@ -13,7 +13,7 @@ class Seller extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ThemeData theme = Theme.of(context);
     final user = ModalRoute.of(context)!.settings.arguments as UserModel;
-    print(user.toSnapshot().entries.first);
+    print(user.id);
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -62,7 +62,7 @@ class Seller extends ConsumerWidget {
             ]),
           ),
           body: TabBarView(children: [
-            const Products(),
+            Products(user: user),
             const Rejected(),
             ManageUser(
               user: user,
