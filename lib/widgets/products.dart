@@ -1,17 +1,28 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 import 'package:shikishaadmin/models/product_model.dart';
 import 'package:shikishaadmin/models/user_model.dart';
 import 'package:shikishaadmin/providers/product_provider.dart';
 import 'package:shikishaadmin/widgets/custome_input.dart';
 import 'package:shikishaadmin/widgets/text_widget.dart';
 
-class Products extends ConsumerWidget {
-  const Products({super.key, required this.user});
+class Productss extends ConsumerStatefulWidget {
+  const Productss({super.key, required this.user});
   final UserModel user;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _ProductssState();
+}
+
+class _ProductssState extends ConsumerState<Productss> {
+  @override
+  Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
     final TextEditingController titleController = TextEditingController();
     final TextEditingController descriptionController = TextEditingController();
@@ -19,9 +30,32 @@ class Products extends ConsumerWidget {
     ThemeData theme = Theme.of(context);
     final product = ref.watch(productclass);
     final allProducts = ref.watch(productProvider);
-    final specifiUser = ref.watch(specificUserProducts);
-    Future<List<ProductModel>> firebaseProducts =
-        specifiUser.userProducts(user);
+
+    FirebaseStorage storage = FirebaseStorage.instance;
+
+    String? imageUrl;
+    Future<void> uploadImage(String? inputSource) async {
+      final picker = ImagePicker();
+      XFile? pickedImage;
+      try {
+        pickedImage = await picker.pickImage(
+            source: inputSource == 'camera'
+                ? ImageSource.camera
+                : ImageSource.gallery);
+        final String fileName = path.basename(pickedImage!.path);
+        File file = File(pickedImage.path);
+        var snapshot =
+            await storage.ref().child("images/imageName").putFile(file);
+
+        final downloadUrl = await snapshot.ref.getDownloadURL();
+        imageUrl = downloadUrl;
+        // setState(() {
+        //   imageUrl = downloadUrl;
+        // });
+        print(imageUrl);
+      } catch (e) {}
+    }
+
     return Column(
       children: [
         const SizedBox(
@@ -83,7 +117,42 @@ class Products extends ConsumerWidget {
                             controller: priceController,
                             label: "Price",
                             inputType: TextInputType.number,
-                          )
+                          ),
+                          // !testing image upload
+                          Container(
+                              margin: const EdgeInsets.all(15),
+                              padding: const EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
+                                border: Border.all(color: Colors.white),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    offset: Offset(2, 2),
+                                    spreadRadius: 2,
+                                    blurRadius: 1,
+                                  ),
+                                ],
+                              ),
+                              child: (imageUrl != null)
+                                  ? Image.network(imageUrl!)
+                                  : Image.network(
+                                      'https://i.imgur.com/sUFH1Aq.png')),
+
+                          ElevatedButton.icon(
+                              onPressed: () async {
+                                // await uploadImage('');
+                              },
+                              icon: const Icon(Icons.file_copy),
+                              label: InfoText(
+                                text: "Upload image",
+                                textstyle: theme.textTheme.bodyLarge!
+                                    .copyWith(color: Colors.white),
+                              ))
+                          //! end of testing
                         ],
                       ),
                       actions: [
@@ -114,11 +183,12 @@ class Products extends ConsumerWidget {
                                       title: titleController.text,
                                       category: "category",
                                       description: descriptionController.text,
-                                      img: "img",
+                                      img: "imageUrl!",
                                       price: int.parse(priceController.text),
-                                      seller: user.name,
-                                      phone: user.phone);
-                                  await product.addProduct(productModel, user);
+                                      seller: widget.user.name,
+                                      phone: widget.user.phone);
+                                  await product.addProduct(
+                                      productModel, widget.user);
                                   Navigator.of(context).pop();
                                 },
                                 icon: const Icon(
@@ -161,9 +231,8 @@ class Products extends ConsumerWidget {
                             height: 50,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                image: const DecorationImage(
-                                    image: NetworkImage(
-                                        "https://images.unsplash.com/photo-1603302576837-37561b2e2302?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bGFwdG9wc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"),
+                                image: DecorationImage(
+                                    image: NetworkImage(data[index].img),
                                     fit: BoxFit.cover)),
                           ),
                           title: InfoText(
@@ -198,3 +267,31 @@ class Products extends ConsumerWidget {
     );
   }
 }
+
+// class Products extends ConsumerWidget {
+//   const Products({super.key, required this.user});
+//   final UserModel user;
+
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     final formKey = GlobalKey<FormState>();
+//     final TextEditingController titleController = TextEditingController();
+//     final TextEditingController descriptionController = TextEditingController();
+//     final TextEditingController priceController = TextEditingController();
+//     ThemeData theme = Theme.of(context);
+//     final product = ref.watch(productclass);
+//     final allProducts = ref.watch(productProvider);
+//     final specifiUser = ref.watch(specificUserProducts);
+//     Future<List<ProductModel>> firebaseProducts =
+//         specifiUser.userProducts(user);
+
+//     String? imageUrl;
+//     void uploadImage() async {
+//       final _firebaseStorage = FirebaseStorage.instance;
+//       final _imagePicker = ImagePicker();
+//       PickedFile image;
+//     }
+
+    
+//   }
+// }

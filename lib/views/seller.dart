@@ -62,7 +62,7 @@ class Seller extends ConsumerWidget {
             ]),
           ),
           body: TabBarView(children: [
-            Products(user: user),
+            Productss(user: user),
             const Rejected(),
             ManageUser(
               user: user,
